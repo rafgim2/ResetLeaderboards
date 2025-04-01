@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Resetear Colecciones de Leaderboard</title>
+  <!-- Carga de Firebase App y Firestore en modo compat -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <h1>- Reset Tablas AR School Quiz -</h1>
+  <p></p>
+  <script>
+    // Configuración de Firebase (usando la configuración proporcionada)
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5EAMg-0p54f8bPq8SVdZ_ePg5Xso3cmg",
+      authDomain: "arm1-acbba.firebaseapp.com",
+      projectId: "arm1-acbba",
+      storageBucket: "arm1-acbba.firebasestorage.app",
+      messagingSenderId: "408825932019",
+      appId: "1:408825932019:web:10f2079b590b4c9ca3af86",
+      measurementId: "G-S78TM6PVRL"
+    };
+
+    // Inicializa Firebase y Firestore en modo compat
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Función para borrar todos los documentos de una colección usando batch
+    async function resetCollection(collectionName) {
+      try {
+        const snapshot = await db.collection(collectionName).get();
+        if (snapshot.empty) {
+          console.log(`Colección ${collectionName} ya estaba vacía.`);
+          return;
+        }
+        const batch = db.batch();
+        snapshot.forEach(doc => {
+          batch.delete(doc.ref);
+        });
+        await batch.commit();
+        console.log(`Colección ${collectionName} reseteada.`);
+      } catch (error) {
+        console.error(`Error al resetear ${collectionName}:`, error);
+      }
+    }
+
+    // Función que recorre las colecciones a resetear
+    async function resetAllCollections() {
+      const categories = ["leaderboard", "Capleaderboard", "Musicleaderboard", "Calcleaderboard"];
+      for (const category of categories) {
+        for (let num = 4; num <= 10; num++) {
+          const collectionName = `${category}_${num}`;
+          await resetCollection(collectionName);
+        }
+      }
+      console.log("Todas las colecciones han sido reseteadas.");
+    }
+
+    // Ejecuta la función al cargar la página
+    resetAllCollections();
+  </script>
+</body>
+</html>
