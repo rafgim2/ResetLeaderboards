@@ -13,7 +13,7 @@
   <script>
     // Configuración de Firebase (usando la configuración proporcionada)
     const firebaseConfig = {
-      apiKey: "AIzaSyD5EAMg-0p54f8bPq8SVdZ_ePg5Xso3cmg",
+      apiKey: "AIzaSyD5EAMg-0p54f8Bq8SVdZ_ePg5Xso3cmg",
       authDomain: "arm1-acbba.firebaseapp.com",
       projectId: "arm1-acbba",
       storageBucket: "arm1-acbba.firebasestorage.app",
@@ -57,8 +57,16 @@
       console.log("Todas las colecciones han sido reseteadas.");
     }
 
-    // Ejecuta la función al cargar la página
-    resetAllCollections();
+    // Verifica el token en la URL antes de ejecutar la acción
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const tokenValido = "TU_TOKEN_SECRETO_AQUI32"; // Reemplaza con tu token generado
+
+    if (token === tokenValido) {
+      resetAllCollections();
+    } else {
+      console.log("Token no válido. La acción no se ejecutará.");
+    }
   </script>
 </body>
 </html>
